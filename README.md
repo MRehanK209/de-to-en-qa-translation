@@ -1,5 +1,5 @@
 
-# Translation Pipeline for German QA Datasets (Using OpenAI GPT)
+# Translation Pipeline for German QA Datasets
 
 This Python script translates a JSONL-format dataset containing **German-language question-answer pairs** (and optionally context) into **English**, using the OpenAI GPT model via API.
 
