@@ -25,8 +25,8 @@ def translate_text(text, model_name="gpt-3.5-turbo"):
         content = response.choices[0].message.content.strip()
         return content
     except Exception as e:
-        print(f"❌ OpenAI API error: {e}")
-        return "<ERROR>"
+        print(f" OpenAI API error: {e}")
+        return "<ERROR>", e
 
 def translate_column_samplewise(dataset, column, model="gpt-3.5-turbo", preprocess_fn=None):
     translations = []
@@ -56,7 +56,7 @@ def main():
     # Load and sample
     full_dataset = load_dataset("json", data_files=args.path, split="train")
     dataset = full_dataset.select(range(min(args.samples, len(full_dataset))))
-    print(f"✅ Loaded {len(dataset)} samples from: {args.path}")
+    print(f" Loaded {len(dataset)} samples from: {args.path}")
 
     # Translate columns
     dataset = dataset.add_column("question_en", translate_column_samplewise(dataset, "question", model=args.model))
@@ -70,13 +70,13 @@ def main():
             return str(c) if c is not None else ""
 
         dataset = dataset.add_column("context_en", translate_column_samplewise(dataset, "context", model=args.model, preprocess_fn=flatten_context))
-        print("📝 Translated 'context' column.")
+        print("Translated 'context' column.")
     else:
-        print("ℹ️ No 'context' column found — skipping.")
+        print("No 'context' column found — skipping.")
 
     # Save as .jsonl file
     dataset.to_json(args.output_path, orient="records", lines=True)
-    print(f"✅ Translated dataset saved at: {args.output_path}")
+    print(f"Translated dataset saved at: {args.output_path}")
 
 if __name__ == "__main__":
     main()
